@@ -10,6 +10,7 @@ export default function ChampionList() {
             async function fetchChampions() {
                 try {
                     const response = await axios.get("http://localhost:3001/champions")
+                    //const response = await axios.get("http://localhost:3001/summoners/Faker/T1")
                     setChampions(response.data.champions)
                 } finally {
                     setLoading(false)

@@ -28,7 +28,8 @@ function convertToChampion(championId, championMap) {
 
 export function convertChampionMastery(championMastery, championMap) {
     return {
-        championLevel: championMastery.championLevel,
+        level: championMastery.championLevel,
+        points: championMastery.championPoints,
         lastPlayTime: championMastery.lastPlayTime,
         ...convertToChampion(championMastery.championId, championMap)
     }

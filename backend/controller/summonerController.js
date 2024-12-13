@@ -9,7 +9,7 @@ export async function getSummoner(req, res, next) {
         const championMasteries = await riotApi.getChampionMasteries(summoner.puuid)
         const championData = await getChampionMap()
         const champions = championMasteries.map(championMastery => convertChampionMastery(championMastery, championData))
-        const sortedChampions = _.orderBy(champions, ['championLevel', 'name'], ['desc', 'asc'])
+        const sortedChampions = _.orderBy(champions, ['level', 'points', 'name'], ['desc', 'desc', 'asc'])
         res.status(200).json({
             gameName: summoner.gameName,
             tagLine: summoner.tagLine?.trim(),
