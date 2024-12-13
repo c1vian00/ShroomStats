@@ -1,8 +1,6 @@
-import dotenv from "dotenv";
+import './dotenvConfig.js'
 import express from 'express';
 import championRoute from "./routes/championRoute.js";
-
-dotenv.config();
 
 const app = express();
 
