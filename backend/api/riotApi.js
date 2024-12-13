@@ -6,6 +6,10 @@ const riotToken = process.env.RIOT_API_KEY;
 const lolBaseUrl = process.env.LOL_API_URL;
 const riotBaseUrl = process.env.RIOT_API_URL;
 
+if (!riotToken) {
+    throw Error('RIOT_API_KEY should be defined in your .env file or as an environment variable')
+}
+
 export async function getChampionData() {
     const response = await axios.get(`https://ddragon.leagueoflegends.com/cdn/${DDRAGON_VERSION}/data/en_US/champion.json`)
     return response.data
