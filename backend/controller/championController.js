@@ -1,14 +1,11 @@
-import axios from "axios";
+import * as riotApi from '../api/riotApi.js'
 
 const DDRAGON_VERSION = "14.24.1"
 
-const riotToken = process.env.RIOT_API_KEY;
-const baseUrl = process.env.RIOT_API_URL;
-
 async function getChampionMap() {
-    const response = await axios.get(`https://ddragon.leagueoflegends.com/cdn/${DDRAGON_VERSION}/data/en_US/champion.json`)
+    const response = await riotApi.getChampionData()
     const championMap = {}
-    for (const champion of Object.values(response.data.data)) {
+    for (const champion of Object.values(response.data)) {
         championMap[champion.key] = champion
     }
     return championMap
@@ -27,14 +24,7 @@ function convertToChampion(championId, championMap) {
 
 export async function listChampions(req, res, next) {
     try {
-        const response = await axios.get(`${baseUrl}/lol/platform/v3/champion-rotations`, {
-            headers: {
-                accept: 'application/json',
-                "X-Riot-Token": riotToken
-            },
-        });
-
-        const { freeChampionIds } = response.data
+        const { freeChampionIds } = await riotApi.getFreeChampionRotation()
         const championMap = await getChampionMap()
         const result = {
             champions: freeChampionIds.map(championId => convertToChampion(championId, championMap))
@@ -42,6 +32,6 @@ export async function listChampions(req, res, next) {
         res.status(200).json(result);
     } catch (error) {
         console.error('Error finding champions', error);
-        res.status(500).json({ error: 'Failed to fetch trending champions' });
+        res.status(500).json({ error: 'Failed to list champions' });
     }
 }
