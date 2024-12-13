@@ -34,3 +34,13 @@ export async function getSummoner(gameName, tagLine) {
     });
     return response.data
 }
+
+export async function getChampionMasteries(puuid) {
+    const response = await axios.get(`${lolBaseUrl}/lol/champion-mastery/v4/champion-masteries/by-puuid/${puuid}`, {
+        headers: {
+            accept: 'application/json',
+            "X-Riot-Token": riotToken
+        },
+    });
+    return response.data
+}

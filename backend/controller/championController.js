@@ -2,10 +2,14 @@ import * as riotApi from '../api/riotApi.js'
 
 const DDRAGON_VERSION = "14.24.1"
 
-async function getChampionMap() {
-    const response = await riotApi.getChampionData()
+let championDataPromise
+export async function getChampionMap() {
+    if (!championDataPromise) {
+        championDataPromise = riotApi.getChampionData()
+    }
+    const championData = await championDataPromise
     const championMap = {}
-    for (const champion of Object.values(response.data)) {
+    for (const champion of Object.values(championData.data)) {
         championMap[champion.key] = champion
     }
     return championMap
@@ -19,6 +23,14 @@ function convertToChampion(championId, championMap) {
         pictureUrl: `https://ddragon.leagueoflegends.com/cdn/${DDRAGON_VERSION}/img/champion/` + champion.image.full,
         title: champion.title,
         blurb: champion.blurb,
+    }
+}
+
+export function convertChampionMastery(championMastery, championMap) {
+    return {
+        championLevel: championMastery.championLevel,
+        lastPlayTime: championMastery.lastPlayTime,
+        ...convertToChampion(championMastery.championId, championMap)
     }
 }
 
